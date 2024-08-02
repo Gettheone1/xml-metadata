@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="stringtype">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="timestamptype">
+    <xs:restriction base="xs:dateTime">
+  </xs:simpleType>
+
+  <xs:simpleType name="booleantype">
+    <xs:restriction base="xs:boolean">
+  </xs:simpleType>
+
+  <xs:complexType name="organizationtype">
+    <xs:sequence>
+      <xs:element name="name" type="stringtype"/>
+      <xs:element name="address" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="locationtype">
+    <xs:sequence>
+      <xs:element name="country" type="stringtype"/>
+      <xs:element name="state" type="stringtype" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="periodtype">
+    <xs:sequence>
+      <xs:element name="start" type="timestamptype" minOccurs="0"/>
+      <xs:element name="end" type="timestamptype" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="concepttype">
+    <xs:sequence>
+      <xs:element name="code" type="stringtype" minOccurs="0"/>
+      <xs:element name="system" type="stringtype" minOccurs="0"/>
+      <xs:element name="description" type="stringtype" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="classificationtype">
+    <xs:sequence>
+      <xs:element name="regulation" type="concepttype"/>
+      <xs:element name="evaluated" type="booleantype"/>
+      <xs:element name="tool" type="stringtype" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="privacyenhancingtype">
+    <xs:sequence>
+      <xs:element name="tool-category" type="concepttype"/>
+      <xs:element name="tool-used" type="stringtype" minOccurs="0"/>
+      <xs:element name="parameters" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="result" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sourcetype">
+    <xs:sequence>
+      <xs:element name="version" type="stringtype"/>
+      <xs:element name="title" type="stringtype"/>
+      <xs:element name="id" type="stringtype"/>
+      <xs:element name="location" type="stringtype"/>
+      <xs:element name="issuer" type="organizationtype" maxOccurs="unbounded"/>
+      <xs:element name="description" type="stringtype"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="provenancetype">
+    <xs:sequence>
+      <xs:element name="source" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="origin" type="organizationtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="origin-geography" type="locationtype" maxOccurs="unbounded"/>
+      <xs:element name="date" type="timestamptype"/>
+      <xs:element name="previous-date" type="timestamptype" minOccurs="0"/>
+      <xs:element name="generation-period" type="periodtype" minOccurs="0"/>
+      <xs:element name="generation-method" type="concepttype" maxOccurs="unbounded"/>
+      <xs:element name="format" type="stringtype" maxOccurs="unbounded"/>
+      <xs:element name="sub-provenance" type="provenancetype" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="usetype">
+    <xs:sequence>
+      <xs:element name="classification" type="classificationtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="consents" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="privacy-enhancing" type="privacyenhancingtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="processing-included" type="locationtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="processing-excluded" type="locationtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="storage-allowed" type="locationtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="storage-forbidden" type="locationtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="license" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="intended-purpose" type="concepttype" maxOccurs="unbounded"/>
+      <xs:element name="copyright" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="patent" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="trademark" type="stringtype" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="metadatatype">
+    <xs:sequence>
+      <xs:element name="source" type="sourcetype"/>
+      <xs:element name="provenance" type="provenancetype"/>
+      <xs:element name="use" type="usetype"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="metadata" type="metadatatype"/>
+</xs:schema>
